@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+  <!-- d3 -->
+  <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script> 
+
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+  <!-- Application -->
+  <link rel="stylesheet" href="application.css">
+  <script src="f.js"></script>
+  <script src="application.js"></script>
+</head>
+<body ng-app="AICApp" ng-controller="CalculatorController as aic">
+
+<div class="aic-container">
+  <md-card>
+    <md-card-header class="aic-header">
+      <md-card-header-text class="md-title">
+        Accrued Interest Calculator
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-content>
+      <p>
+        Interest on a bond accrues between regularly scheduled payments. To find out
+        how much interest is owed on a given bond, use the calculator below. Select the
+        appropriate bond type to figure accrued interest for corporate and municipal
+        bonds or government bonds. Interest for corporate and municipal bonds is
+        calculated using a 360-day year. Interest for government bonds is calculated
+        using a 365-day year.
+      </p>
+      <div layout="row">
+        <md-input-container class="md-block" flex="40">
+          <label>Bond Type</label>
+          <md-select ng-model="aic.selectedBondType" ng-change="aic.calculateInterest()">
+            <md-option ng-value="bondType" ng-repeat="bondType in aic.bondTypes">{{ bondType.name }}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container class="md-block" flex="20">
+          <label>Initial Amount</label>
+          <input type="number" min="0" step="1000" placeholder="10000" md-autofocus ng-model="aic.initialAmount" ng-change="aic.calculateInterest()"></input>
+        </md-input-container>
+
+        <md-input-container class="md-block" flex="20">
+          <label>Annual Interest Rate</label>
+          <input type="number" min="0" step="0.1" placeholder="4.0" ng-model="aic.interestRate" ng-change="aic.calculateInterest()"></input>
+        </md-input-container>
+
+        <md-input-container class="md-block" flex="20">
+          <label>Days in Holding Period</label>
+          <input type="number" min="1" max="9999" placeholder="365" ng-model="aic.holdingPeriod" ng-change="aic.calculateInterest()"></input>
+        </md-input-container>
+      </div>
+    </md-card-content>
+
+    <md-divider></md-divider>
+    <md-card-content layout="row" layout-align="center center">
+      <div flex="50">
+        <md-subheader>Accrued Interest</md-subheader>
+        <center><h1>{{ aic.totalInterest | currency:"$ " }}</h1></center>
+      </div>
+      <div flex="50">
+        <md-subheader>Compound Interest</md-subheader>
+        <center><h1>{{ aic.totalCompoundInterest | currency:"$ " }}</h1></center>
+      </div>
+    </md-card-content>
+
+    <md-divider></md-divider>
+    <md-card-content>
+      <div interest-table table-data="aic.interestData" every="5"></div>
+    </md-card-content>
+  </md-card>
+</div>
+</body>
+</html>
